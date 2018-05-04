@@ -1,4 +1,4 @@
-function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bottom_BC,top_BC,left_BC,right_BC] = Parameters()
+function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bottom_BC,top_BC,left_BC,right_BC, init] = Parameters()
 % This file holds the parameters to be loaded into the main script. Used
 % for modularity of code.
 
@@ -30,3 +30,6 @@ left_BC = (y.^2).*sin(y/4);
 
 % Right BC (Dirichlet)
 right_BC = cos(pi*y).*cosh(2*pi-y);
+
+% Initial condition
+init = zeros(y_interior_points,x_interior_points);
