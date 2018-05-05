@@ -1,18 +1,21 @@
-function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bottom_BC,top_BC,left_BC,right_BC, init] = Parameters()
+function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bottom_BC,top_BC,left_BC,right_BC, init, D] = Parameters()
 % This file holds the parameters to be loaded into the main script. Used
 % for modularity of code.
 
 % Number of points to discretize the domain
-x_interior_points = 10;
-y_interior_points = 10;
+x_interior_points = 3;
+y_interior_points = 3;
 t_steps = 10;
+
+% Diffusion coefficient (1 for this problem)
+D = 1;
 
 % Domain
 ax = 0;
 ay = 0;
 bx = 2*pi;
 by = 2*pi;
-T_max = 10;
+T_max = 100;
 
 % Set up vectors for boundaries
 x = linspace(ax,bx,x_interior_points+2);
@@ -32,4 +35,4 @@ left_BC = (y.^2).*sin(y/4);
 right_BC = cos(pi*y).*cosh(2*pi-y);
 
 % Initial condition
-init = zeros(y_interior_points,x_interior_points);
+init = ones(y_interior_points + 2,x_interior_points);
