@@ -14,8 +14,8 @@ close all;
 delT = t(2) - t(1);
 delX = x(2) - x(1);
 delY = y(2) - y(1);
-LX = D*delT/(2*delX);
-LY = D*delT/(2*delY);
+LX = D*delT/(2*delX^2);
+LY = D*delT/(2*delY^2);
 
 % n is the total number of interior points the "+2" comes from the extra
 % unknowns due to the Neumann boundary conditions on top and bottom
@@ -44,18 +44,25 @@ for r = 2:length(t)
     for s = 1:y_interior_points + 2
         u(s,:,r) = SolveTriDiag(a_first_half_step,b_first_half_step,c_first_half_step,RHS(:,s));
     end
-        
-        
+    RHS = CRS_second_half_step(u(:,:,r),x_interior_points,y_interior_points,LX,LY,delY,bottom_BC,top_BC,left_BC,right_BC);
+    for w = 1:x_interior_points
+        u(:,w,r) = SolveTriDiag(a_second_half_step,b_second_half_step,c_second_half_step,RHS(:,w));
+    end 
 end
 
-disp(u(:,:,end) - u(:,:,end-1));
-        % * Solve tri-diagonal system for second half step (same
-        % coefficients, implicit in y)
-        % * Store solution in 2D array? Initialize before loop start
-        % * Advance time step
-        
-% TODO: Reshape 2D array into 3D array, each page representing a different
-% time step
+u = u(2:end-1,:,:);
 
-% TODO: Solve explicit method, hopefully with this same script. Ensure
-% check on stability condition is carried out
+lastError = u(:,:,end) - u(:,:,end-1);
+
+
+figure;
+plot(y,left_BC);
+hold on
+plot(y,right_BC);
+legend('Left BC','Right BC')
+hold off
+
+animate_and_save(u,x,y,length(t));
+
+
+

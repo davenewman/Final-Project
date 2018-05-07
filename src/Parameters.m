@@ -3,9 +3,9 @@ function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bo
 % for modularity of code.
 
 % Number of points to discretize the domain
-x_interior_points = 3;
-y_interior_points = 3;
-t_steps = 10;
+x_interior_points = 100;
+y_interior_points = 100;
+t_steps = 200;
 
 % Diffusion coefficient (1 for this problem)
 D = 1;
@@ -15,7 +15,7 @@ ax = 0;
 ay = 0;
 bx = 2*pi;
 by = 2*pi;
-T_max = 100;
+T_max = 1;
 
 % Set up vectors for boundaries
 x = linspace(ax,bx,x_interior_points+2);
@@ -35,4 +35,4 @@ left_BC = (y.^2).*sin(y/4);
 right_BC = cos(pi*y).*cosh(2*pi-y);
 
 % Initial condition
-init = ones(y_interior_points + 2,x_interior_points);
+init = zeros(y_interior_points + 2,x_interior_points);
