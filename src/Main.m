@@ -1,7 +1,9 @@
 % Created by David Newman, PeopleSoft ID 1441532
+% Solves the two-dimensional diffusion equation with two Neumann boundary
+% conditions using the ADI (Alternating Direction Implicit) discretization
 
 clear;
-clc;
+% clc;
 close all;
 
 % Obtain parameters needed to solve equation. For now we are only dealing
@@ -53,7 +55,9 @@ end
 u = u(2:end-1,:,:);
 
 lastError = u(:,:,end) - u(:,:,end-1);
+fprintf('Maximum change in last two time steps = %.15f\n',max(abs(lastError(:))));
 
+%animate_and_save(u,x,y,length(t));
 
 figure;
 plot(y,left_BC);
@@ -61,8 +65,6 @@ hold on
 plot(y,right_BC);
 legend('Left BC','Right BC')
 hold off
-
-animate_and_save(u,x,y,length(t));
 
 
 

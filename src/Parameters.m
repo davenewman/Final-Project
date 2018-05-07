@@ -3,9 +3,9 @@ function [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bo
 % for modularity of code.
 
 % Number of points to discretize the domain
-x_interior_points = 100;
-y_interior_points = 100;
-t_steps = 200;
+x_interior_points = 10;
+y_interior_points = 10;
+t_steps = 10;
 
 % Diffusion coefficient (1 for this problem)
 D = 1;

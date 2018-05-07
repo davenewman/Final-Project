@@ -13,9 +13,9 @@ for idx = 1:tlength
     im = frame2im(frame);
     [imind,cm] = rgb2ind(im,256);
     if first_frame
-      imwrite(imind,cm,filename,'gif','DelayTime',0.04,'Loopcount',inf);
+      imwrite(imind,cm,filename,'gif','DelayTime',0.1,'Loopcount',inf);
       first_frame = false;
     else
-      imwrite(imind,cm,filename,'gif','DelayTime',0.04,'WriteMode','append');
+      imwrite(imind,cm,filename,'gif','DelayTime',0.1,'WriteMode','append');
     end
 end
