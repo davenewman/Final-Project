@@ -1,16 +1,17 @@
+% Created by David Newman, PeopleSoft ID 1441532
+
 function RHS = CRS_second_half_step(u,x_interior_points,y_interior_points,LX,LY,delY,bottom_BC,top_BC,left_BC,right_BC)
 % Creates right-hand side for each row in the second half step, each
 % column involves a tri-diagonal system
 
 % This array will store the right hand side for an entire sweep through the
 % array. The right hand sides are stored as columns.
-% fprintf('New calculation!\n')
+
 RHS = zeros(y_interior_points + 2,x_interior_points);
 
 tmp1 = zeros(y_interior_points + 2,1);
 tmp2 = zeros(y_interior_points + 2,1);
 tmp3 = zeros(y_interior_points + 2,1);
-% For bottom row of domain, there are x_interior_points equations
 
 % Right hand side for first column
 for i = 1:y_interior_points + 2
@@ -25,9 +26,7 @@ RHS(:,1) = tmp1;
 
 % Right hand side for general interior columns
 for j = 2:x_interior_points - 1
-%     fprintf('\nInterior Column\n')
     for k = 1:y_interior_points + 2
-%         fprintf('u(%d,%d)...u(%d,%d)...u(%d,%d)\n',k,j-1,k,j,k,j+1);
         tmp2(k) = LX*u(k,j-1) + (1 - 2*LX)*u(k,j) + LX*u(k,j+1);
     end
     tmp2(1) = tmp2(1) + 2*LY*delY*bottom_BC(j);

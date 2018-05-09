@@ -3,13 +3,10 @@
 % conditions using the ADI (Alternating Direction Implicit) discretization
 
 clear;
-% clc;
+clc;
 close all;
 
-% Obtain parameters needed to solve equation. For now we are only dealing
-% with the ADI method however there may be some modularity added later to
-% deal with the explicit method, which should be MUCH easier to implement.
-
+% Obtain parameters needed to solve equation.
 [x_interior_points,y_interior_points,t_steps,ax,ay,bx,by,T_max,x,y,t,bottom_BC,top_BC,left_BC,right_BC, init, D] = Parameters();
 
 % Lambda x and lambda y appear frequently in the computation
@@ -18,10 +15,6 @@ delX = x(2) - x(1);
 delY = y(2) - y(1);
 LX = D*delT/(2*delX^2);
 LY = D*delT/(2*delY^2);
-
-% n is the total number of interior points the "+2" comes from the extra
-% unknowns due to the Neumann boundary conditions on top and bottom
-n = x_interior_points*(y_interior_points + 2);
 
 % Build the diagonals of the main array at each half step. "a" is the main
 % diagonal, "b" is the lower diagonal, and "c" is the upper diagonal. For
@@ -36,11 +29,12 @@ a_second_half_step = (1 + 2*LY)*ones(1,y_interior_points + 2);
 b_second_half_step = [-LY*ones(1,y_interior_points) -2*LY];
 c_second_half_step = [-2*LY -LY*ones(1,y_interior_points)];
 
+% Initialize computational domain
 u = init;
 
-% TODO: Main loop:
-        % /DONE * Create right side for initial half step (implicit in x) 
-        % * Solve tri-diagonal system for first half step
+% Main loop: create right-hand side for first half step, solve the
+% tri-diagonal system for each row, create right-hand side for second half
+% step, solve the tri-diagonal system for each row.
 for r = 2:length(t)
     RHS = CRS_first_half_step(u(:,:,r-1),x_interior_points,y_interior_points,LX,LY,delY,bottom_BC,top_BC,left_BC,right_BC);
     for s = 1:y_interior_points + 2
@@ -50,21 +44,21 @@ for r = 2:length(t)
     for w = 1:x_interior_points
         u(:,w,r) = SolveTriDiag(a_second_half_step,b_second_half_step,c_second_half_step,RHS(:,w));
     end 
+    fprintf('Time step %d\n',r);
 end
 
+% Only keep interior points
 u = u(2:end-1,:,:);
 
-lastError = u(:,:,end) - u(:,:,end-1);
-fprintf('Maximum change in last two time steps = %.15f\n',max(abs(lastError(:))));
+% To verify that the solution has reached steady state
+lastChange = u(:,:,end) - u(:,:,end-1);
+fprintf('Maximum change in last two time steps = %.15f\n',max(abs(lastChange(:))));
 
-%animate_and_save(u,x,y,length(t));
+[X,Y] = meshgrid(x(2:end-1),y(2:end-1));
+animate(u,X,Y,length(t));
+surf(X,Y,u(:,:,end));
 
-figure;
-plot(y,left_BC);
-hold on
-plot(y,right_BC);
-legend('Left BC','Right BC')
-hold off
+
 
 
 
