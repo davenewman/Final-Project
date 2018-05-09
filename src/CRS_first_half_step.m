@@ -24,6 +24,7 @@ tmp1(end) = tmp1(end) + LX*right_BC(1);
 
 RHS(:,1) = tmp1;
 
+
 % Right hand side for the general interior rows
 for j = 2:y_interior_points + 1
     for k = 2:x_interior_points + 1

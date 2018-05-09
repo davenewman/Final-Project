@@ -18,7 +18,8 @@ LY = D*delT/(delY^2);
 A = 1 - 2*LX - 2*LY;
 
 if (LX + LY) > 0.5
-    fprintf(2,'Stability condition NOT met\n');
+    fprintf(2,'Stability condition NOT met, stopping execution\n');
+    return;
 end
 
 % Initialize computational domain. Pad exterior with left and right

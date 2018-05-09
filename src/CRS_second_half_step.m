@@ -17,12 +17,13 @@ tmp3 = zeros(y_interior_points + 2,1);
 for i = 1:y_interior_points + 2
     tmp1(i) = (1 - 2*LX)*u(i,1) + LX*u(i,2);
 end
+
+% The first and last element of the bottom row RHS has boundary conditions
 tmp1(1) = tmp1(1) - 2*LY*delY*bottom_BC(1);
 tmp1(end) = tmp1(end) - 2*LY*delY*top_BC(1);
 tmp1 = tmp1 + LX*left_BC';
 
 RHS(:,1) = tmp1;
-
 
 % Right hand side for general interior columns
 for j = 2:x_interior_points - 1
@@ -43,4 +44,3 @@ tmp3(1) = tmp3(1) - 2*LY*delY*bottom_BC(end);
 tmp3(end) = tmp3(end) + 2*LY*delY*top_BC(end);
 tmp3 = tmp3 + LX*right_BC';
 RHS(:,end) = tmp3;
-    
